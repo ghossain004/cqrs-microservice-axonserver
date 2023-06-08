@@ -1,13 +1,12 @@
 package com.hossain.cqrs.command.api.controller;
 
 import com.hossain.cqrs.command.api.commands.CreateProductCommand;
+import com.hossain.cqrs.command.api.commands.DeleteProductCommand;
+import com.hossain.cqrs.command.api.commands.UpdateProductCommand;
 import com.hossain.cqrs.command.api.model.ProductRestModel;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -29,5 +28,19 @@ public class ProductCommandController {
                         .build();
         String result = commandGateway.sendAndWait(createProductCommand);
         return result;
+    }
+
+    @PutMapping("/{productId}")
+    public void updateProduct(@PathVariable("productId") String productId, @RequestBody ProductRestModel productRestModel) {
+        UpdateProductCommand updateProductCommand = new UpdateProductCommand(productRestModel, productId);
+
+        commandGateway.sendAndWait(updateProductCommand);
+    }
+
+    @DeleteMapping("/{productId}")
+    public void deleteProduct(@PathVariable("productId") String productId) {
+        DeleteProductCommand deleteProductCommand = new DeleteProductCommand(productId);
+
+        commandGateway.sendAndWait(deleteProductCommand);
     }
 }
