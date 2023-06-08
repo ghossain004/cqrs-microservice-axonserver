@@ -38,7 +38,7 @@ public class ProductProjection {
     @QueryHandler
     public ProductRestModel handle(GetProductByIdQuery getProductByIdQuery) {
         Product product = productRepository.findById(getProductByIdQuery.getId())
-                .orElseThrow(() -> new RuntimeException("Product Not Found"));
+                .orElseThrow(() -> new RuntimeException("Product not found with id " + getProductByIdQuery.getId() + "."));
 
         return ProductRestModel.builder()
                 .quantity(product.getQuantity())

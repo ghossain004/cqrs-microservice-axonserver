@@ -35,7 +35,7 @@ public class ProductEventsHandler {
         ProductRestModel productRestModel = command.getProductRestModel();
 
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Update information can't be done with the user id " + id + "."));
+                .orElseThrow(() -> new RuntimeException("Update information can't be done with the id " + id + "."));
 
         product.setName(productRestModel.getName());
         product.setPrice(productRestModel.getPrice());
@@ -49,7 +49,7 @@ public class ProductEventsHandler {
         String id = command.getProductId();
 
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Delete user with user id " + id + " failed."));
+                .orElseThrow(() -> new RuntimeException("Delete user with id " + id + " failed."));
 
         productRepository.delete(product);
     }
