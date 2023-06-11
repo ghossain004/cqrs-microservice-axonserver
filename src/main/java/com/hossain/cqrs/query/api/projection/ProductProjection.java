@@ -7,7 +7,6 @@ import com.hossain.cqrs.query.api.queries.GetProductByIdQuery;
 import com.hossain.cqrs.query.api.queries.GetProductsQuery;
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

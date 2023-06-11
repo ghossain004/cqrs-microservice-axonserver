@@ -32,7 +32,12 @@ public class ProductCommandController {
 
     @PutMapping("/{productId}")
     public void updateProduct(@PathVariable("productId") String productId, @RequestBody ProductRestModel productRestModel) {
-        UpdateProductCommand updateProductCommand = new UpdateProductCommand(productRestModel, productId);
+        UpdateProductCommand updateProductCommand = UpdateProductCommand.builder()
+                .productId(productId)
+                .name(productRestModel.getName())
+                .price(productRestModel.getPrice())
+                .quantity(productRestModel.getQuantity())
+                .build();
 
         commandGateway.sendAndWait(updateProductCommand);
     }
