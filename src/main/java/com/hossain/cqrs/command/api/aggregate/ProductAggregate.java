@@ -27,8 +27,12 @@ public class ProductAggregate {
     private BigDecimal price;
     private Integer quantity;
 
+    public ProductAggregate() {
+    }
+
     @CommandHandler
     public ProductAggregate(CreateProductCommand createProductCommand) {
+        System.out.println("create command");
         ProductCreatedEvent productCreatedEvent = new ProductCreatedEvent();
 
         BeanUtils.copyProperties(createProductCommand, productCreatedEvent);
@@ -36,40 +40,42 @@ public class ProductAggregate {
         AggregateLifecycle.apply(productCreatedEvent);
     }
 
-    @CommandHandler
-    public void handle(UpdateProductCommand updateProductCommand) {
-        ProductUpdateEvent productUpdateEvent = new ProductUpdateEvent();
-        BeanUtils.copyProperties(updateProductCommand, productUpdateEvent);
-        AggregateLifecycle.apply(productUpdateEvent);
-    }
-
-    @CommandHandler
-    public void handle(DeleteProductCommand deleteProductCommand) {
-        ProductDeleteEvent productDeleteEvent = new ProductDeleteEvent();
-        BeanUtils.copyProperties(deleteProductCommand, productDeleteEvent);
-        AggregateLifecycle.apply(productDeleteEvent);
-    }
-
-    public ProductAggregate() {
-    }
-
     @EventSourcingHandler
     public void on(ProductCreatedEvent productCreatedEvent){
+        System.out.println("create eventsource");
         this.name = productCreatedEvent.getName();
         this.productId = productCreatedEvent.getProductId();
         this.price = productCreatedEvent.getPrice();
         this.quantity = productCreatedEvent.getQuantity();
     }
 
+    @CommandHandler
+    public void handle(UpdateProductCommand updateProductCommand) {
+        System.out.println("update command");
+        ProductUpdateEvent productUpdateEvent = new ProductUpdateEvent();
+        BeanUtils.copyProperties(updateProductCommand, productUpdateEvent);
+        AggregateLifecycle.apply(productUpdateEvent);
+    }
+
     @EventSourcingHandler
     public void on(ProductUpdateEvent event){
+        System.out.println("update eventsource");
         this.name = event.getName();
         this.price = event.getPrice();
         this.quantity = event.getQuantity();
     }
 
+    @CommandHandler
+    public void handle(DeleteProductCommand deleteProductCommand) {
+        System.out.println("delete command");
+        ProductDeleteEvent productDeleteEvent = new ProductDeleteEvent();
+        BeanUtils.copyProperties(deleteProductCommand, productDeleteEvent);
+        AggregateLifecycle.apply(productDeleteEvent);
+    }
+
     @EventSourcingHandler
     public void on(ProductDeleteEvent event){
+        System.out.println("delete eventsource");
         markDeleted();
     }
 }

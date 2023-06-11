@@ -18,33 +18,51 @@ public class ProductEventsHandler {
 
     @EventHandler
     public void on(ProductCreatedEvent event) {
+        System.out.println("create eventhandler");
         Product product = new Product();
         BeanUtils.copyProperties(event, product);
         productRepository.save(product);
 
-//        throw new RuntimeException("There is some error to save the product.");
+//        try {
+//            Product product = new Product();
+//            BeanUtils.copyProperties(event, product);
+//            productRepository.save(product);
+//        }catch (Exception exception){
+//            throw new RuntimeException("There is some error to save the product.");
+//        }
 
     }
 
     @EventHandler
     public void on(ProductUpdateEvent event) {
+        System.out.println("update eventhandler");
+
         Product product = new Product();
         BeanUtils.copyProperties(event, product);
         productRepository.save(product);
+
+//        try {
+//            Product product = new Product();
+//            BeanUtils.copyProperties(event, product);
+//            productRepository.save(product);
+//        }catch (Exception exception){
+//            throw new RuntimeException("Product didn't updated due to id not found.");
+//        }
     }
 
     @EventHandler
     public void on(ProductDeleteEvent event) {
-        String productId = event.getProductId();
-        productRepository.deleteById(productId);
+        System.out.println("delete eventhandler");
+//        String productId = event.getProductId();
+//        productRepository.deleteById(productId);
 
-//        try {
-//            String productId = event.getProductId();
-//            productRepository.deleteById(productId);
-//        }catch (Exception exception){
-//            throw new RuntimeException("Id not found");
-//        }
-//
+        try {
+            String productId = event.getProductId();
+            productRepository.deleteById(productId);
+        }catch (Exception exception){
+            throw new RuntimeException("No match found for delete.");
+        }
+
     }
 
     @ExceptionHandler

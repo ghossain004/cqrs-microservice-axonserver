@@ -19,33 +19,70 @@ public class ProductCommandController {
 
     @PostMapping
     public String addProduct(@RequestBody ProductRestModel productRestModel){
-        CreateProductCommand createProductCommand =
-                CreateProductCommand.builder()
-                        .productId(UUID.randomUUID().toString())
-                        .name(productRestModel.getName())
-                        .price(productRestModel.getPrice())
-                        .quantity(productRestModel.getQuantity())
-                        .build();
-        String result = commandGateway.sendAndWait(createProductCommand);
-        return result;
+        System.out.println("postmapping");
+//        CreateProductCommand createProductCommand =
+//                CreateProductCommand.builder()
+//                        .productId(UUID.randomUUID().toString())
+//                        .name(productRestModel.getName())
+//                        .price(productRestModel.getPrice())
+//                        .quantity(productRestModel.getQuantity())
+//                        .build();
+//        String result = commandGateway.sendAndWait(createProductCommand);
+//        return result;
+
+        try {
+            CreateProductCommand createProductCommand =
+                    CreateProductCommand.builder()
+                            .productId(UUID.randomUUID().toString())
+                            .name(productRestModel.getName())
+                            .price(productRestModel.getPrice())
+                            .quantity(productRestModel.getQuantity())
+                            .build();
+            String result = commandGateway.sendAndWait(createProductCommand);
+            return result;
+        }catch (Exception e){
+            throw new RuntimeException("There is some error to save the product.");
+        }
     }
 
     @PutMapping("/{productId}")
     public void updateProduct(@PathVariable("productId") String productId, @RequestBody ProductRestModel productRestModel) {
-        UpdateProductCommand updateProductCommand = UpdateProductCommand.builder()
-                .productId(productId)
-                .name(productRestModel.getName())
-                .price(productRestModel.getPrice())
-                .quantity(productRestModel.getQuantity())
-                .build();
+        System.out.println("putmapping");
+//        UpdateProductCommand updateProductCommand = UpdateProductCommand.builder()
+//                .productId(productId)
+//                .name(productRestModel.getName())
+//                .price(productRestModel.getPrice())
+//                .quantity(productRestModel.getQuantity())
+//                .build();
+//
+//        commandGateway.sendAndWait(updateProductCommand);
 
-        commandGateway.sendAndWait(updateProductCommand);
+        try {
+            UpdateProductCommand updateProductCommand = UpdateProductCommand.builder()
+                    .productId(productId)
+                    .name(productRestModel.getName())
+                    .price(productRestModel.getPrice())
+                    .quantity(productRestModel.getQuantity())
+                    .build();
+            commandGateway.sendAndWait(updateProductCommand);
+        }catch (Exception e){
+            throw new RuntimeException("Product didn't updated due to id not found.");
+        }
     }
 
     @DeleteMapping("/{productId}")
     public void deleteProduct(@PathVariable("productId") String productId) {
-        DeleteProductCommand deleteProductCommand = new DeleteProductCommand(productId);
+        System.out.println("deletemapping");
+//        DeleteProductCommand deleteProductCommand = new DeleteProductCommand(productId);
+//
+//        commandGateway.sendAndWait(deleteProductCommand);
 
-        commandGateway.sendAndWait(deleteProductCommand);
+        try {
+            DeleteProductCommand deleteProductCommand = new DeleteProductCommand(productId);
+
+            commandGateway.sendAndWait(deleteProductCommand);
+        }catch (Exception e){
+            throw new RuntimeException("No match found for delete.");
+        }
     }
 }
